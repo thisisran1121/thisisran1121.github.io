@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>임란알리프 · DBA / DB Engineer Portfolio</title>
+<meta name="description" content="Oracle 19c · PostgreSQL 17.6 구축과 양방향 이기종 마이그레이션 경험을 가진 신입 DBA 임란알리프의 포트폴리오">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F6;
+  --sheet:#FFFFFF;
+  --ink:#18212B;
+  --muted:#5A6573;
+  --rule:#D5DBE2;
+  --ora:#0E6B6B;      /* Oracle 측 표시색 */
+  --ora-tint:#E1F0EF;
+  --pg:#3847A3;       /* PostgreSQL 측 표시색 */
+  --pg-tint:#E6E9F7;
+  --issue:#A8551A;    /* 문제 발생 표시색 */
+  --code-bg:#EEF1F5;
+  --sans:"IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12171D; --sheet:#1A2129; --ink:#E4E8ED; --muted:#9AA5B2; --rule:#2E3844;
+    --ora:#5CC2BD; --ora-tint:#16302F; --pg:#9AA6F0; --pg-tint:#1F2542;
+    --issue:#E39A5F; --code-bg:#222B35;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12171D; --sheet:#1A2129; --ink:#E4E8ED; --muted:#9AA5B2; --rule:#2E3844;
+  --ora:#5CC2BD; --ora-tint:#16302F; --pg:#9AA6F0; --pg-tint:#1F2542;
+  --issue:#E39A5F; --code-bg:#222B35;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 24px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.72;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--pg)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--pg);outline-offset:3px;border-radius:2px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+code{background:var(--code-bg);padding:.08em .38em;border-radius:3px}
+img{max-width:100%}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:200px minmax(0,1fr);gap:56px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 40px);align-self:start;padding-top:64px;font-size:14px}
+nav.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+nav.toc li{margin:0}
+nav.toc a{display:block;padding:6px 0 6px 16px;color:var(--muted);text-decoration:none;margin-left:-1px;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--ink);border-left-color:var(--ink)}
+nav.toc .sub a{padding-left:28px;font-size:13px}
+nav.toc .who{font-weight:600;color:var(--ink);margin-bottom:14px;line-height:1.4}
+nav.toc .who span{display:block;font-weight:400;color:var(--muted);font-size:13px}
+main{padding:64px 0 96px;min-width:0}
+
+/* Hero */
+header.hero{padding-bottom:48px;border-bottom:1px solid var(--rule)}
+.hero h1{font-size:clamp(34px,5vw,48px);line-height:1.15;letter-spacing:-.02em;margin:0 0 10px;font-weight:700}
+.hero .role{font-size:19px;color:var(--muted);margin:0 0 28px}
+.hero .contact{font-size:14.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 22px;margin:0}
+.hero .contact a{color:var(--ink)}
+
+.flow{margin:40px 0 8px;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:26px 24px 20px}
+.flow-caption{font-size:14px;color:var(--muted);margin:0 0 18px}
+.flow-grid{display:grid;grid-template-columns:1fr minmax(180px,1.35fr) 1fr;align-items:center;gap:14px}
+.db{border-radius:8px;padding:16px 16px 14px;border:1.5px solid}
+.db.ora{border-color:var(--ora);background:var(--ora-tint)}
+.db.pg{border-color:var(--pg);background:var(--pg-tint)}
+.db b{display:block;font-size:17px;line-height:1.3}
+.db.ora b{color:var(--ora)} .db.pg b{color:var(--pg)}
+.db small{display:block;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:4px}
+.lanes{display:flex;flex-direction:column;gap:18px}
+.lane{font-size:13px;line-height:1.45}
+.lane .count{font-family:var(--mono);font-size:19px;font-weight:500;display:block;letter-spacing:-.01em}
+.lane .how{color:var(--muted)}
+.arrow{height:10px;position:relative;margin:4px 0 6px}
+.arrow svg{width:100%;height:10px;display:block;overflow:visible}
+.lane.fwd .count{color:var(--pg)} .lane.back .count{color:var(--ora)}
+.lane.back{text-align:right}
+.arrow path{stroke-dasharray:400;stroke-dashoffset:400;animation:draw 1.1s ease-out forwards}
+.lane.back .arrow path{animation-delay:.55s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){.arrow path{animation:none;stroke-dashoffset:0}html{scroll-behavior:auto}}
+
+/* Sections */
+section{padding-top:64px}
+h2{font-size:26px;letter-spacing:-.015em;margin:0 0 6px;line-height:1.3}
+h2 .n{color:var(--muted);font-weight:500;margin-right:10px;font-family:var(--mono);font-size:.8em}
+.lead{color:var(--muted);margin:0 0 28px;font-size:15px}
+h3{font-size:19px;margin:44px 0 12px;line-height:1.4}
+h4{font-size:16px;margin:0 0 6px}
+p{margin:0 0 14px;max-width:68ch}
+
+.summary{list-style:none;margin:0;padding:0;counter-reset:s}
+.summary li{padding:18px 0 18px 0;border-top:1px solid var(--rule);font-size:17px;max-width:70ch}
+.summary li:last-child{border-bottom:1px solid var(--rule)}
+.summary strong{display:block;font-size:14px;color:var(--muted);font-weight:500;margin-bottom:2px}
+
+/* Tech stack */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:0 36px}
+.stack dl{margin:0;padding:18px 0;border-top:1px solid var(--rule)}
+.stack dt{font-weight:600;margin-bottom:8px}
+.stack dd{margin:0 0 4px;color:var(--muted);font-size:15px}
+.stack dd b{color:var(--ink);font-weight:500}
+
+/* Project */
+.proj-head{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:26px 26px 22px}
+.proj-head h3{margin:0 0 4px;font-size:22px}
+.proj-meta{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+.proj-head p:last-child{margin-bottom:0}
+
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+.tbl{overflow-x:auto;margin:10px 0 8px;border:1px solid var(--rule);border-radius:8px;background:var(--sheet)}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;background:var(--code-bg);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td .mono{white-space:nowrap}
+
+.role-list{margin:0;padding-left:1.2em}
+.role-list li{margin-bottom:10px;max-width:68ch}
+.scope-note{font-size:14px;color:var(--muted);border-left:3px solid var(--rule);padding:4px 0 4px 14px;margin:18px 0 0}
+
+/* STAR cases */
+.case{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;margin:22px 0;overflow:hidden}
+.case-top{padding:20px 24px 14px;border-bottom:1px solid var(--rule)}
+.case-top .tag{font-size:12.5px;font-weight:600;border-radius:4px;padding:2px 8px;display:inline-block;margin-bottom:8px}
+.tag.ora{color:var(--ora);background:var(--ora-tint)}
+.tag.pg{color:var(--pg);background:var(--pg-tint)}
+.tag.mig{color:var(--ink);background:var(--code-bg)}
+.case-top h4{font-size:18px;line-height:1.45;margin:0}
+.star{display:grid;grid-template-columns:118px minmax(0,1fr)}
+.star > div{padding:14px 24px;border-bottom:1px solid var(--rule)}
+.star > div:nth-last-child(-n+2){border-bottom:0}
+.star .k{font-weight:600;font-size:14px;padding-right:0;border-right:1px solid var(--rule)}
+.star .k span{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+.star .k.issue{color:var(--issue)}
+.star .v p{margin:0 0 8px}
+.star .v p:last-child{margin:0}
+.star .v ul{margin:0;padding-left:1.1em}
+.star .v li{margin-bottom:4px}
+pre{background:var(--code-bg);border-radius:6px;padding:12px 14px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.6;margin:8px 0 4px}
+
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:14px}
+.mini div{border-top:2px solid var(--ink);padding-top:12px;font-size:15px}
+.mini h4{font-size:15.5px}
+.mini p{margin:0;color:var(--muted)}
+
+.verify{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.verify > div{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.verify p{font-size:15px;color:var(--muted);margin:0 0 10px}
+.grade{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);font-size:12.5px}
+.grade span{border:1px solid var(--rule);border-radius:4px;padding:2px 8px}
+
+footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--rule);color:var(--muted);font-size:14px}
+.certs{display:flex;flex-wrap:wrap;gap:8px 28px;margin:0;padding:0;list-style:none;font-size:15px}
+.certs li span{color:var(--muted);font-family:var(--mono);font-size:13px;margin-right:6px}
+
+@media (max-width: 900px){
+  .wrap{grid-template-columns:1fr;gap:0}
+  nav.toc{display:none}
+  main{padding-top:40px}
+}
+@media (max-width: 640px){
+  body{font-size:16px}
+  .wrap{padding:0 18px}
+  .flow{padding:20px 16px 16px}
+  .flow-grid{grid-template-columns:1fr;gap:10px}
+  .lane.back{text-align:left}
+  .star{grid-template-columns:1fr}
+  .star .k{border-right:0;border-bottom:0 !important;padding-bottom:0}
+  .star > div.v{padding-top:4px}
+  .case-top,.star > div{padding-left:18px;padding-right:18px}
+}
+@media print{
+  nav.toc{display:none}.wrap{grid-template-columns:1fr}
+  body{background:#fff}.case,.proj-head,.flow{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc" aria-label="목차">
+    <div class="who">임란알리프<span>DBA · DB Engineer</span></div>
+    <ol>
+      <li><a href="#profile">1. Profile Summary</a></li>
+      <li><a href="#stack">2. Tech Stack</a></li>
+      <li><a href="#project">3. Project Experience</a></li>
+      <li class="sub"><a href="#env">Architecture &amp; Environment</a></li>
+      <li class="sub"><a href="#role">My Role</a></li>
+      <li class="sub"><a href="#cases">Troubleshooting</a></li>
+      <li class="sub"><a href="#tuning">Tuning &amp; 검증</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <h1>임란알리프</h1>
+      <p class="role">Oracle과 PostgreSQL을 직접 구축하고, 두 DB 사이에서 데이터를 무손실로 옮겨 본 신입 DBA</p>
+      <p class="contact">
+        <span>Email <a href="mailto:ran2846@naver.com">ran2846@naver.com</a></span>
+        <span>GitHub <a href="https://github.com/YOUR-ID">github.com/YOUR-ID</a></span>
+        <span>한성대학교 빅데이터공학과 졸업</span>
+      </p>
+
+      <div class="flow" role="figure" aria-label="Oracle 19c와 PostgreSQL 17.6 사이의 양방향 마이그레이션 요약">
+        <p class="flow-caption">부동산 실거래가 데이터 · 양방향 이기종 마이그레이션 결과</p>
+        <div class="flow-grid">
+          <div class="db ora"><b>Oracle 19c</b><small>19.25.0.0 RU · EE · Single Instance<br>SQL*Loader · Direct Path</small></div>
+          <div class="lanes">
+            <div class="lane fwd">
+              <span class="count">3,441,651 rows</span>
+              <div class="arrow" aria-hidden="true"><svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 5 H192 M186 1 L194 5 L186 9" fill="none" stroke="var(--pg)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg></div>
+              <span class="how">ora2pg · 추출 약 92초 · 건수 + 교차 쿼리 검증</span>
+            </div>
+            <div class="lane back">
+              <span class="count">1,710,788 rows</span>
+              <div class="arrow" aria-hidden="true"><svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M198 5 H8 M14 1 L6 5 L14 9" fill="none" stroke="var(--ora)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg></div>
+              <span class="how">자체 설계 파이프라인 · MD5 무결성 + 건수 일치</span>
+            </div>
+          </div>
+          <div class="db pg"><b>PostgreSQL 17.6</b><small>RPM 설치 · systemd 서비스<br>COPY · pg_stat_statements</small></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 1. Profile -->
+    <section id="profile">
+      <h2><span class="n">1</span>Profile Summary</h2>
+      <p class="lead">DBA로서의 비전과 핵심 역량</p>
+      <ul class="summary">
+        <li><strong>구축</strong>Rocky Linux 8.10 서버 위에 Oracle 19c와 PostgreSQL 17.6을 디스크·LVM 구성부터 커널 파라미터, SGA/PGA·shared_buffers 메모리 설계, HugePages까지 처음부터 직접 구축했습니다.</li>
+        <li><strong>이관과 정합성</strong>Oracle → PostgreSQL 약 344만 건, PostgreSQL → Oracle 약 171만 건을 양방향으로 이관하며 타입 매핑, 메타데이터 기반 DDL 자동 생성, MD5·건수·교차 쿼리 검증까지 설계했습니다.</li>
+        <li><strong>비전</strong>육군 ROTC 소대장 시절 몸에 밴 "사전 준비 → 검증된 절차로 신속 복구" 원칙으로, Oracle과 오픈소스 DB 양쪽에 능통한 DBA가 되어 24시간 365일 안정적인 서비스를 지키고자 합니다.</li>
+      </ul>
+    </section>
+
+    <!-- 2. Tech Stack -->
+    <section id="stack">
+      <h2><span class="n">2</span>Tech Stack</h2>
+      <p class="lead">프로젝트에서 직접 설치·구성·운영한 기술 기준</p>
+      <div class="stack">
+        <dl>
+          <dt>RDBMS</dt>
+          <dd><b>Oracle Database 19c</b> (19.25.0.0 RU, EE) — Silent 설치, DBCA, OPatch, Listener, Tablespace 설계, SQL*Loader</dd>
+          <dd><b>PostgreSQL 17.6</b> — initdb, postgresql.conf / pg_hba.conf, Role·Schema 설계, COPY</dd>
+          <dd><b>SQL</b> — SQL, PL/SQL 기초, 데이터 딕셔너리(dba_tab_columns 등)·information_schema·pg_catalog 조회</dd>
+        </dl>
+        <dl>
+          <dt>OS / Infra</dt>
+          <dd><b>Rocky Linux 8.10</b> (RHEL 계열) · RHCSA</dd>
+          <dd>parted(GPT), LVM, XFS, fstab · 폐쇄망 가정 로컬 DNF 저장소</dd>
+          <dd>sysctl 커널 파라미터, limits / PAM, THP 비활성화, HugePages, SELinux, systemd 유닛 작성</dd>
+          <dd>Shell Script 배치 자동화, scp, md5sum</dd>
+        </dl>
+        <dl>
+          <dt>Migration / Loading</dt>
+          <dd><b>ora2pg 24.3</b> · Perl DBI 1.645 · DBD::Oracle</dd>
+          <dd><b>SQL*Loader</b> Conventional / Direct Path, 컨트롤 파일 설계</dd>
+          <dd>PostgreSQL <b>COPY TO / FROM</b>, STAGING → FINAL 2단계 적재</dd>
+        </dl>
+        <dl>
+          <dt>Monitoring / Diagnostics</dt>
+          <dd><b>Prometheus</b> · <b>Grafana 12.4.1</b> (Provisioning)</dd>
+          <dd>node_exporter, oracledb_exporter 0.5.2, postgres_exporter 0.19.1, Custom Metrics / Queries</dd>
+          <dd><b>Oracle AHF / Orachk</b>, pg_stat_statements, 자체 Health Check 스크립트</dd>
+        </dl>
+        <dl>
+          <dt>Benchmark / Tools</dt>
+          <dd><b>HammerDB v5.0</b> (TPROC-C)</dd>
+          <dd>DBeaver, WinSCP, Google Drive 기반 문서 협업</dd>
+        </dl>
+        <dl>
+          <dt>Certifications</dt>
+          <dd><b>RHCSA</b> (Red Hat, 2026.01)</dd>
+          <dd><b>정보처리기사</b> (2025.09) · <b>SQL 개발자(SQLD)</b> (2025.06)</dd>
+          <dd>컴퓨터활용능력 2급 (2024.11)</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 3. Project -->
+    <section id="project">
+      <h2><span class="n">3</span>Project Experience</h2>
+      <p class="lead">청년취업사관학교(SeSAC) 용산4기 · AI 활용 클라우드·데이터 엔지니어 양성과정 최종 프로젝트</p>
+
+      <div class="proj-head">
+        <h3>부동산 시세 데이터를 이용한 이기종 DB 관리 — Oracle 19.25 vs PostgreSQL 17.6</h3>
+        <p class="proj-meta">2025.12 – 2026.04 (교육과정 기간) · 6인 팀 · DB 파트 · 국토교통부 실거래가 공공데이터 (17개 시·도, 2010–2025)</p>
+        <p>동일한 OS·데이터셋 조건에서 상용 DBMS와 오픈소스 DBMS를 아키텍처·운영 관점에서 비교하는 프로젝트입니다. 두 DB 서버와 모니터링·부하 발생 서버 1대로 환경을 구성하고, 실거래가 데이터를 각 DB에 적재한 뒤 양방향으로 이관했습니다. Prometheus·Grafana 모니터링과 HammerDB 부하 테스트로 운영 특성도 함께 검증했습니다.</p>
+      </div>
+
+      <h3 id="env">Architecture &amp; Environment</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>서버</th><th>역할</th><th>주요 구성</th></tr></thead>
+          <tbody>
+            <tr><td>DB #1</td><td>Oracle DB</td><td>Oracle 19.25.0.0 EE (Single Instance, AL32UTF8), Listener, node_exporter, oracledb_exporter</td></tr>
+            <tr><td>DB #2</td><td>PostgreSQL DB</td><td>PostgreSQL 17.6 (UTF-8, ko_KR.UTF-8), pg_stat_statements, node_exporter, postgres_exporter</td></tr>
+            <tr><td>Monitor</td><td>모니터링 · 부하 발생</td><td>Prometheus, Grafana, node_exporter, HammerDB v5.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>구분</th><th>Oracle 19c</th><th>PostgreSQL 17.6</th></tr></thead>
+          <tbody>
+            <tr><td>OS</td><td colspan="2">Rocky Linux 8.10 (양쪽 동일, OS 차이로 인한 편차 제거)</td></tr>
+            <tr><td>스토리지</td><td>1TB × 2 → VG 1개, LV 3개 분리<br><span class="mono">/u01</span> 엔진 50G · <span class="mono">/oradata</span> 200G · <span class="mono">/backup</span> 200G</td><td>데이터 디스크 2개 → LVM 단일 볼륨 약 1.75TB<br>data · log · WAL archive · backup 디렉터리 분리</td></tr>
+            <tr><td>설치 방식</td><td>Silent 설치 (response file) → OPatch 교체 → RU 19.25 적용 → DBCA Silent</td><td>RPM 의존성 순서 설치 (libs → client → server → contrib) → initdb → systemd 등록</td></tr>
+            <tr><td>메모리</td><td>SGA+PGA에 서버 RAM 40% 할당, HugePages 2,400개, <code>use_large_pages=ONLY</code></td><td>shared_buffers 4GB(RAM 약 25%), HugePages 2,300개, <code>huge_pages=on</code></td></tr>
+            <tr><td>설치 검증</td><td>AHF 26.3 / Orachk</td><td>자체 pg17_healthcheck (68개 항목)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="role">My Role</h3>
+      <p>팀 내에서 <strong>DB 환경 구성</strong>과 <strong>양방향 마이그레이션 아키텍처</strong> 파트를 전담했습니다.</p>
+      <ul class="role-list">
+        <li><strong>DB 서버 구축</strong> — Oracle 19c와 PostgreSQL 17.6을 별도 리눅스 서버에 처음부터 구축. 엔진·데이터·백업 영역 분리, 워크로드 특성에 맞춘 커널·리소스 설정, 아키텍처 차이를 반영한 메모리 설계와 HugePages 도입.</li>
+        <li><strong>적재 파이프라인 설계</strong> — 원본을 무손실로 받는 STAGING 테이블과 비즈니스 타입으로 정제된 FINAL 테이블을 분리한 2단계 구조. 지역·연도 단위로 오류 구간만 재적재할 수 있게 설계 (Oracle 3,441,651건 / PostgreSQL 1,710,788건).</li>
+        <li><strong>양방향 마이그레이션</strong> — Oracle → PostgreSQL은 ora2pg 기반, PostgreSQL → Oracle은 공식 도구 부재로 메타데이터 기반 DDL 자동 생성부터 Direct Path 적재까지 파이프라인을 직접 설계.</li>
+        <li><strong>정합성 검증</strong> — 건수 비교, MD5 체크섬, 동일 조건 쿼리의 양쪽 결과 교차 검증 절차 수립.</li>
+      </ul>
+      <p class="scope-note">모니터링 스택(Prometheus·Grafana)과 HammerDB 벤치마크는 팀 공동 작업 범위로, 아래 「Tuning &amp; 검증」에 별도로 정리했습니다.</p>
+
+      <h3 id="cases">Key Achievements &amp; Troubleshooting</h3>
+      <p class="lead">문제 발생 → 분석 → 해결 → 결과 순으로 정리했습니다.</p>
+
+      <!-- Case 1 -->
+      <article class="case">
+        <div class="case-top">
+          <span class="tag ora">Oracle · Memory</span>
+          <h4>HugePages 확보 실패로 인한 ORA-27106 인스턴스 기동 실패</h4>
+        </div>
+        <div class="star">
+          <div class="k issue">Issue<span>문제 발생</span></div>
+          <div class="v"><p>SGA를 HugePages에 고정하기 위해 <code>use_large_pages=ONLY</code>로 설정한 뒤, 필요한 HugePages가 확보되지 않아 <code>ORA-27106: system pages not available to allocate memory</code>로 인스턴스 기동이 실패했습니다.</p></div>
+          <div class="k">Analysis<span>분석</span></div>
+          <div class="v"><p>ONLY는 HugePages가 부족하면 일반 페이지로 fallback하지 않고 기동을 실패시키는 설정입니다(성능 저하 상태로 조용히 운영되는 것을 막기 위한 의도). 원인을 추적한 결과, 시스템 운영 중 누적된 <strong>메모리 단편화</strong>가 연속된 2MB 페이지 확보를 방해하고 있었습니다.</p></div>
+          <div class="k">Solution<span>해결</span></div>
+          <div class="v">
+            <p>서비스 복구를 위한 완화 조치와 근본 원인 해소를 분리해 진행했습니다.</p>
+<pre>SQL> create pfile from spfile;      -- use_large_pages=TRUE로 완화 후 우선 기동
+# sync; echo 3 > /proc/sys/vm/drop_caches   -- OS 캐시 정리로 단편화 해소
+SQL> shutdown immediate; startup;   -- spfile(ONLY) 기반 재기동</pre>
+          </div>
+          <div class="k">Result<span>결과</span></div>
+          <div class="v"><p><code>show parameter use_large</code> = ONLY, <code>HugePages_Total</code>이 설정값(2,400, Oracle Doc ID 401749.1 스크립트 산출)과 일치함을 확인. HugePages는 계산값을 넣는 것으로 끝나지 않으며, 장애 시에는 "즉시 복구"와 "근본 해소"를 구분해 접근해야 한다는 운영 원칙을 체득했습니다.</p></div>
+        </div>
+      </article>
+
+      <!-- Case 2 -->
+      <article class="case">
+        <div class="case-top">
+          <span class="tag mig">PostgreSQL → Oracle · Migration</span>
+          <h4>공식 전환 도구가 없는 역방향 이관 — 메타데이터 기반 파이프라인 직접 설계</h4>
+        </div>
+        <div class="star">
+          <div class="k issue">Issue<span>문제 발생</span></div>
+          <div class="v"><p>Oracle → PostgreSQL은 ora2pg를 사용할 수 있었지만, 반대 방향은 공식 전환 도구가 제한적이어서 multi_family_sales · single_family_sales (합계 1,710,788건)의 테이블 구조와 데이터를 옮길 방법을 새로 설계해야 했습니다.</p></div>
+          <div class="k">Analysis<span>분석</span></div>
+          <div class="v"><p>컬럼 구조는 SQL 표준 <code>information_schema</code>에서 얻을 수 있지만, 코멘트(<code>pg_description</code>)와 인덱스 정의(<code>pg_class · pg_index · pg_attribute</code> 등)는 PostgreSQL 전용 시스템 카탈로그를 참조해야 한다는 점을 확인했습니다.</p></div>
+          <div class="k">Solution<span>해결</span></div>
+          <div class="v">
+            <ul>
+              <li><code>information_schema.columns</code>를 CASE로 분기해 Oracle 타입으로 매핑하고 <code>string_agg</code>로 CREATE TABLE 조립. 정의되지 않은 예외 타입은 <code>ELSE VARCHAR2(4000)</code>으로 폴백해 이관이 중단되지 않게 처리.</li>
+              <li>같은 패턴으로 COMMENT · PK · UK · INDEX DDL 6종을 추출해 단일 스크립트로 결합. PK 인덱스는 <code>USING INDEX TABLESPACE TS_SINDX</code>로 데이터와 I/O 분리.</li>
+              <li><code>COPY TO</code>로 CSV 추출 → <code>md5sum</code> 생성 → scp 전송 → 수신측 <code>md5sum -c</code> 검증 → SQL*Loader <code>direct=true</code> 적재 (rows=10000, bindsize/readsize 10MB, exit code 로깅).</li>
+            </ul>
+          </div>
+          <div class="k">Result<span>결과</span></div>
+          <div class="v"><p>두 테이블 모두 MD5 <code>OK</code>, SQL*Loader exit code 0, Oracle 적재 건수가 PostgreSQL 원본(1,208,997 / 501,791건)과 정확히 일치. 도구가 없는 상황에서도 데이터 딕셔너리를 근거로 해결책을 설계할 수 있음을 확인했습니다.</p></div>
+        </div>
+      </article>
+
+      <!-- Case 3 -->
+      <article class="case">
+        <div class="case-top">
+          <span class="tag mig">PostgreSQL → Oracle · Data Type</span>
+          <h4>timestamp → DATE 파싱 실패와 boolean 대응 타입 부재</h4>
+        </div>
+        <div class="star">
+          <div class="k issue">Issue<span>문제 발생</span></div>
+          <div class="v"><p>PostgreSQL의 timestamp 컬럼을 CSV로 추출해 Oracle DATE로 적재할 때 포맷이 맞지 않아 파싱이 실패했습니다. 또한 PostgreSQL의 boolean은 Oracle에 동등한 타입이 없었습니다.</p></div>
+          <div class="k">Analysis<span>분석</span></div>
+          <div class="v"><p>CSV는 텍스트이므로 날짜는 양쪽이 합의한 <strong>고정 포맷 문자열</strong>로 주고받아야 하며, 타입이 없는 값은 의미가 보존되는 다른 타입으로 명시적으로 매핑해야 한다고 판단했습니다.</p></div>
+          <div class="k">Solution<span>해결</span></div>
+          <div class="v">
+<pre>-- 추출(PostgreSQL): copy_to.sql 자동 생성 시 타입별 변환
+TO_CHAR(col, 'YYYY-MM-DD HH24:MI:SS')          -- timestamp
+CASE WHEN col THEN 1 ELSE 0 END                -- boolean → NUMBER(1)
+
+-- 적재(Oracle, SQL*Loader CTL): 동일 포맷 마스크로 역변환
+load_dtm TIMESTAMP "YYYY-MM-DD HH24:MI:SS"</pre>
+          </div>
+          <div class="k">Result<span>결과</span></div>
+          <div class="v"><p>timestamp 컬럼을 DATE로 정상 역변환하며 1,710,788건을 손실 없이 적재. 타입 체계 차이를 "아는 것"과 무손실 변환 로직을 "설계하는 것" 사이의 간극을 체감했고, 이 경험은 Oracle → MySQL 같은 이기종 전환에서 타입 매핑 오류를 사전에 예측하는 기준이 됩니다.</p></div>
+        </div>
+      </article>
+
+      <!-- Case 4 -->
+      <article class="case">
+        <div class="case-top">
+          <span class="tag mig">Oracle → PostgreSQL · ora2pg</span>
+          <h4>ora2pg와 DBD::Oracle 간 Perl 런타임 불일치</h4>
+        </div>
+        <div class="star">
+          <div class="k issue">Issue<span>문제 발생</span></div>
+          <div class="v"><p>ora2pg를 표준 절차로 설치한 상태에서는 Oracle에 연결할 수 없었습니다. 또한 TYPE=COPY 모드는 데이터 파일만 생성하고 대상 테이블 DDL은 만들지 않았습니다.</p></div>
+          <div class="k">Analysis<span>분석</span></div>
+          <div class="v"><p>ora2pg 실행 파일의 셔뱅(<code>#!/usr/bin/env perl</code>)이 시스템 Perl 5.26.3을 호출하는데, DBD::Oracle 모듈은 Oracle 번들 Perl 5.38.2 경로에만 설치되어 있었습니다.</p></div>
+          <div class="k">Solution<span>해결</span></div>
+          <div class="v">
+            <ul>
+              <li>셔뱅을 Oracle 번들 Perl 절대 경로로 교체하고, <code>PERL5LIB=/usr/local/share/perl5</code>로 Ora2Pg.pm 경로를 연결. 필요한 <code>libnsl.so.1</code> 심볼릭 링크를 확인·생성하고 <code>perl -MDBD::Oracle</code>로 로딩 검증.</li>
+              <li>대상 DDL은 <code>dba_tab_columns · dba_constraints · dba_indexes</code>를 조회해 PostgreSQL 문법으로 자동 생성 (VARCHAR2 → varchar(N), NUMBER → numeric/integer/bigint, DATE → timestamp(0)).</li>
+              <li><code>REPLACE_TABLES / REPLACE_COLS</code>로 대문자 식별자를 소문자로 치환, <code>DATA_LIMIT 50000 · JOBS 4</code>로 추출.</li>
+            </ul>
+          </div>
+          <div class="k">Result<span>결과</span></div>
+          <div class="v"><p>APT_SALES 3,441,651건을 약 92초에 추출(약 656MB) → scp 전송 → psql 적재. 건수 일치와 함께 DBeaver에서 두 DB에 동일 조건 쿼리를 실행해 같은 32건이 반환됨을 교차 검증했습니다.</p></div>
+        </div>
+      </article>
+
+      <!-- Case 5 -->
+      <article class="case">
+        <div class="case-top">
+          <span class="tag ora">Oracle · Install</span>
+          <h4>Oracle 19c 설치 프로그램이 인식하지 못하는 Rocky Linux 8</h4>
+        </div>
+        <div class="star">
+          <div class="k issue">Issue<span>문제 발생</span></div>
+          <div class="v"><p>Rocky Linux 8은 Oracle 19c OUI가 공식적으로 인식하는 배포판이 아니어서 CVU(Cluster Verification Utility)가 설치를 중단시킬 수 있었습니다.</p></div>
+          <div class="k">Analysis<span>분석</span></div>
+          <div class="v"><p>배포판 식별값을 우회하되, 이 설정이 영구히 남으면 이후 패치·점검 도구가 OS를 잘못 인식할 위험이 있다고 판단했습니다.</p></div>
+          <div class="k">Solution<span>해결</span></div>
+          <div class="v"><p><code>export CV_ASSUME_DISTID=OL7</code>을 .bash_profile에 등록하지 않고 <strong>설치 시점 셸 레벨에서만</strong> 적용한 뒤 Silent 설치 진행. 이후 OPatch를 최신 버전으로 교체하고 <code>opatch prereq CheckConflictAgainstOHWithDetail</code>로 충돌 검사 후 RU 19.25를 적용했습니다.</p></div>
+          <div class="k">Result<span>결과</span></div>
+          <div class="v"><p>Oracle 19.25.0.0 EE 설치 및 패치 완료, <code>opatch lspatches</code>로 적용 확인. 우회 설정은 필요한 시점·범위로만 한정해 이후 패치·점검 도구에 영향을 남기지 않았습니다.</p></div>
+        </div>
+      </article>
+
+      <h3 id="tuning">Tuning &amp; 검증</h3>
+      <p class="lead">성능과 안정성을 위해 적용한 설정, 그리고 설치·운영 검증</p>
+
+      <div class="mini">
+        <div>
+          <h4>Oracle 파라미터 튜닝</h4>
+          <p>약 70개 파라미터를 <code>parameter_setting.sql</code>로 관리. 적응형 옵티마이저 기능(<code>optimizer_adaptive_plans</code>, 동적 샘플링, bind peeking, feedback)을 비활성화해 <strong>Plan Stability</strong>와 부하 테스트 재현성을 확보하고, LGWR 관련 설정으로 로그 동기화 가변성을 줄였습니다.</p>
+        </div>
+        <div>
+          <h4>PostgreSQL 메모리 · OS 설계</h4>
+          <p>shared_buffers 4GB, effective_cache_size 12GB, work_mem 64MB, maintenance_work_mem 512MB. <code>vm.overcommit_memory=2</code>와 systemd <code>OOMScoreAdjust=-1000</code>으로 OOM Killer에 의한 DB 프로세스 종료를 차단했습니다.</p>
+        </div>
+        <div>
+          <h4>HugePages · THP</h4>
+          <p>두 DB 모두 THP를 GRUB 파라미터로 비활성화하고 표준 HugePages 적용. PostgreSQL은 4096MB ÷ 2MB = 2,048개 + 여유 10%로 2,300개를 산정하고 <code>huge_pages=on</code>으로 확보 실패를 즉시 드러나게 설정했습니다.</p>
+        </div>
+        <div>
+          <h4>대용량 적재 최적화</h4>
+          <p>데이터(TS_SDATA)와 인덱스(TS_SINDX) Tablespace 분리로 I/O 경합 완화. SQL*Loader Direct Path로 버퍼 캐시를 우회하고, PostgreSQL 일회성 벌크 로드에서는 <code>synchronous_commit=off</code>의 트레이드오프를 이해하고 적용했습니다.</p>
+        </div>
+        <div>
+          <h4>Slow Query 추적 기반</h4>
+          <p><code>pg_stat_statements</code>(track=all, track_io_timing=on)와 <code>log_min_duration_statement=1000</code>으로 1초 초과 쿼리만 선별 로깅. Oracle은 ASH 기반 Top SQL·Wait Class·Blocking 세션을 Custom Metric으로 수집했습니다.</p>
+        </div>
+        <div>
+          <h4>보안 · 운영 기본기</h4>
+          <p>pg_hba.conf에 scram-sha-256 적용, Exporter DSN을 EnvironmentFile(640 권한)로 분리, 모니터링 전용 DB 계정에 최소 권한(필요 V$ 뷰 SELECT, pg_monitor)만 부여했습니다.</p>
+        </div>
+      </div>
+
+      <h3>설치 검증 · 모니터링 · 벤치마크</h3>
+      <div class="verify">
+        <div>
+          <h4>Oracle AHF / Orachk</h4>
+          <p>AHF 26.3 설치 후 Orachk로 Best Practice 점검. CRITICAL·FAIL 항목(core dump 설정, AUD$ ASSM 전환 등)을 운영 투입 전 우선 조치 대상으로 식별했습니다.</p>
+          <div class="grade"><span>CRITICAL 1</span><span>FAIL 3</span><span>WARNING 18</span><span>INFO 18</span><span>UNDETERMINED 5</span></div>
+        </div>
+        <div>
+          <h4>PostgreSQL Health Check</h4>
+          <p>공식 통합 점검 도구가 없어 OS 9개 · DB 11개 영역, 총 68개 항목을 PASS / WARNING / FAIL로 분류하는 점검 스크립트로 설치 상태를 검증했습니다.</p>
+          <div class="grade"><span>OS 9 영역</span><span>DB 11 영역</span><span>68 항목</span></div>
+        </div>
+        <div>
+          <h4>Prometheus · Grafana (팀)</h4>
+          <p>Pull 방식으로 6개 job 수집, Grafana Provisioning으로 IaC 방식 구성. oracledb_exporter 최신 버전이 서버 glibc 2.28과 호환되지 않아(요구 2.34) OS를 올리는 대신 호환 버전 0.5.2로 동결했습니다. PG17의 pg_stat_checkpointer 분리에 맞춰 쿼리도 수정했습니다.</p>
+        </div>
+        <div>
+          <h4>HammerDB 부하 테스트 (팀)</h4>
+          <p>TPROC-C, 200 Warehouse(약 20GB), VU 1–128 단계별 3회 반복 측정으로 변동계수(CV) 4% 이하의 신뢰도를 확인하고, 스위트 스팟을 근거로 DB별 권장 동시 세션 수와 Connection Pool 필요성을 도출했습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <h4 style="color:var(--ink);margin-bottom:10px">Education &amp; Certifications</h4>
+      <ul class="certs">
+        <li><span>2025.12–2026.04</span>SeSAC 용산4기 AI 활용 클라우드·데이터 엔지니어 양성과정</li>
+        <li><span>2018–2022</span>한성대학교 빅데이터공학과</li>
+        <li><span>2022–2024</span>육군 ROTC 중위 전역</li>
+        <li><span>2026.01</span>RHCSA</li>
+        <li><span>2025.09</span>정보처리기사</li>
+        <li><span>2025.06</span>SQL 개발자</li>
+      </ul>
+      <p style="margin-top:24px">© 임란알리프 · 본 페이지의 모든 수치는 프로젝트 결과 보고서 기준입니다.</p>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
